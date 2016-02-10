@@ -1,0 +1,6 @@
+.field_option_numeric input[type="number"] {
+    width: 99%;
+    height: auto;
+    padding: 5px;
+    outline: none;
+}
