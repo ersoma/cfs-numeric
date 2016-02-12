@@ -9,29 +9,36 @@ class cfs_numeric extends cfs_field
 
     function html( $field ) {
         if ( empty( $field->value ) || ( ! isset($field->value)) ) {
-            $field->value = 0;
+            $field->value = $this->get_option( $field, 'default_value' ) !== "" ? $this->get_option( $field, 'default_value' ) : "0";
         }
-    ?>
-        <script>
-        (function($) {
-            $(function() {
 
-                
-            });
-        })(jQuery);
-        </script>
-        <input type="text" id="<?php echo $field->input_name; ?>" name="" value="<?php echo $field->value; ?>" />
+        // min value
+        $min_value = $this->get_option( $field, 'min_value' );
+        $min_value_str = $min_value != "" ? 'min="' . $min_value . '" ' : '';
+
+        // max value
+        $max_value = $this->get_option( $field, 'max_value' );
+        $max_value_str = $max_value != "" ? 'max="' . $max_value . '" ' : '';
+
+        // step
+        $step = $this->get_option( $field, 'step' );
+        $step_str = $step != "" ? 'data-cfs-numeric-step="' . $step . '"' : '';
+    ?>
+        <button type="button" class="button-secondary">-</button>
+        <input type="number" id="<?php echo $field->input_name; ?>" name="<?php echo $field->input_name; ?>" 
+            value="<?php echo $field->value; ?>" step="any" <?php echo $min_value_str . $max_value_str . $step_str ?>  />
+        <button type="button" class="button-secondary">+</button>
     <?php
     }
 
     function options_html( $key, $field ) {
-        $this->load_assets();
+        $this->load_option_assets();
 
-        $min_value = $this->get_option( $field, 'min_value' ) !== "" ? $this->get_option( $field, 'min_value' ) : "0";
-        $max_value = $this->get_option( $field, 'max_value' ) !== "" ? $this->get_option( $field, 'max_value' ) : "100";
-        $default_value = $this->get_option( $field, 'default_value' ) !== "" ? $this->get_option( $field, 'default_value' ) : "0";
-        $step = $this->get_option( $field, 'step' ) !== "" ? $this->get_option( $field, 'step' ) : "1";
-        $precision = $this->get_option( $field, 'precision' ) !== "" ? $this->get_option( $field, 'precision' ) : "1";
+        $min_value = $key == 'clone' ? "0" : $this->get_option( $field, 'min_value' );
+        $max_value = $key == 'clone' ? "100" : $this->get_option( $field, 'max_value' );
+        $default_value = $key == 'clone' ? "0" : $this->get_option( $field, 'default_value' );
+        $step = $key == 'clone' ? "1" : $this->get_option( $field, 'step' );
+        $precision = $key == 'clone' ? "1" : $this->get_option( $field, 'precision' );
 
         ?>
         <tr class="field_option field_option_<?php echo $this->name; ?>">
@@ -115,20 +122,21 @@ class cfs_numeric extends cfs_field
     }
 
     function pre_save( $value, $field = null ) {
-        /*error_log( "pre_save" );
-        error_log( print_r( $value, true) );
-        if ( is_array( $value )) {
-            $value = $value[0];
-        }
-        */
         return serialize( $value );
     }
 
     function prepare_value( $value, $field = null ) {
+        error_log("prepare_value");
         return unserialize( $value[0] );
     }
 
+    function format_value_for_input($value, $field = null) {
+        error_log("format_value_for_input");
+        return $value;
+    }
+
     function format_value_for_api( $value, $field = null ) {
+        error_log("format_value_for_api");
         $output = 0;
         if ( isset($value) ) {
             $output = $value;
@@ -137,6 +145,10 @@ class cfs_numeric extends cfs_field
     }
 
     function load_assets() {
+        wp_enqueue_style( 'cfs-numeric-styles', plugins_url( 'cfs-numeric' ) . '/assets/styles.css', array(), CFS_NUMERIC_VERSION );
+        wp_enqueue_script( 'cfs-numeric-js', plugins_url( 'cfs-numeric' ) . '/assets/scripts.js', array( 'jquery' ), CFS_NUMERIC_VERSION );
+    }
+    function load_option_assets() {
         wp_enqueue_style( 'cfs-numeric-styles', plugins_url( 'cfs-numeric' ) . '/assets/styles.css', array(), CFS_NUMERIC_VERSION );
     }
 }
