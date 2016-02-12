@@ -146,20 +146,18 @@ class cfs_numeric extends cfs_field
     }
 
     function prepare_value( $value, $field = null ) {
-        error_log("prepare_value");
         return unserialize( $value[0] );
     }
 
     function format_value_for_input($value, $field = null) {
-        error_log("format_value_for_input");
         return $value;
     }
 
     function format_value_for_api( $value, $field = null ) {
-        error_log("format_value_for_api");
         $output = 0;
         if ( isset($value) ) {
-            $output = $value;
+            $precision = $field->options["precision"] !== "" ? $field->options["precision"] : 0;
+            $output = round($value, $precision);
         }
         return $output;
     }
