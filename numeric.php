@@ -23,11 +23,31 @@ class cfs_numeric extends cfs_field
         // step
         $step = $this->get_option( $field, 'step' );
         $step_str = $step != "" ? 'data-cfs-numeric-step="' . $step . '"' : '';
+
+        // precision
+        $precision = $this->get_option( $field, 'precision' );
+
+        // parameters setup
+        $parameters = array();
+        if($min_value != ""){
+            $parameters[] = __('Minimum value: ', 'cfs-numeric') . $min_value;
+        }
+        if($max_value != ""){
+            $parameters[] = __('Maximum value: ', 'cfs-numeric') . $min_value;
+        }
+        if($precision != ""){
+            $parameters[] = __('Value will be rounded to ', 'cfs-numeric') . $precision . __(' digit(s) after the decimal point.', 'cfs-numeric');
+        }
     ?>
         <button type="button" class="button-secondary">-</button>
         <input type="number" id="<?php echo $field->input_name; ?>" name="<?php echo $field->input_name; ?>" 
             value="<?php echo $field->value; ?>" step="any" <?php echo $min_value_str . $max_value_str . $step_str ?>  />
         <button type="button" class="button-secondary">+</button>
+        <p class="description">
+            <?php
+                echo implode(", ", $parameters);
+            ?>
+        </p>
     <?php
     }
 
