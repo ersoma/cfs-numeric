@@ -33,7 +33,7 @@ class cfs_numeric extends cfs_field
             $parameters[] = __('Minimum value: ', 'cfs-numeric') . $min_value;
         }
         if($max_value != ""){
-            $parameters[] = __('Maximum value: ', 'cfs-numeric') . $min_value;
+            $parameters[] = __('Maximum value: ', 'cfs-numeric') . $max_value;
         }
         if($precision != ""){
             $parameters[] = __('Value will be rounded to ', 'cfs-numeric') . $precision . __(' digit(s) after the decimal point.', 'cfs-numeric');
