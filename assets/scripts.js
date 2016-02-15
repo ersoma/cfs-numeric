@@ -2,22 +2,22 @@
     $(function() {
 
         // select + or - buttons
-        $(".cfs_numeric").each(function(){
-            $(this).find("button").on('click', {field: $(this).find("input")}, button_click);
-        })
+        $(".cfs_input").on('click', '.cfs_numeric button', button_click);
 
         // select clear buttons
-        $(".cfs_numeric").each(function(){
-            $(this).find("a").on('click', {field: $(this).find("input")}, clear_click);
-        })
+        $(".cfs_input").on('click', '.cfs_numeric a', clear_click);
         
         // event handler
         function button_click(e){
+
+            // $(this).siblings("input[type='number']").val('')
+
+
             var button_type = e.target.textContent;
-            var max = toNum(e.data.field.attr('max'));
-            var min = toNum(e.data.field.attr('min'));
-            var step = toNum(e.data.field.data("cfs-numeric-step"));
-            var current_value = toNum($(e.data.field).val());
+            var max = toNum($(this).siblings("input[type='number']").attr('max'));
+            var min = toNum($(this).siblings("input[type='number']").attr('min'));
+            var step = toNum($(this).siblings("input[type='number']").data("cfs-numeric-step"));
+            var current_value = toNum($(this).siblings("input[type='number']").val());
 
             // set default value of step
             if(step == undefined) {
@@ -33,14 +33,14 @@
             if(button_type === "-"){
                 // empty field
                 if(current_value === ""){
-                    $(e.data.field).val(min === undefined ? 0 : min);
+                    $(this).siblings("input[type='number']").val(min === undefined ? 0 : min);
                 } else {
                     // check is there is a limit and if it is reached
                     if(min === undefined || (current_value - step) >= min) {
-                        $(e.data.field).val(current_value - step);
+                        $(this).siblings("input[type='number']").val(current_value - step);
                     } else {
                         // limit reached
-                        $(e.data.field).val(min);
+                        $(this).siblings("input[type='number']").val(min);
                     }
                 }
             }
@@ -49,14 +49,14 @@
             if(button_type === "+"){
                 // empty field
                 if(current_value === ""){
-                    $(e.data.field).val(max === undefined ? 0 : max);
+                    $(this).siblings("input[type='number']").val(max === undefined ? 0 : max);
                 } else {
                     // check is there is a limit and if it is reached
                     if(max === undefined || (current_value + step) <= max) {
-                        $(e.data.field).val(current_value + step);
+                        $(this).siblings("input[type='number']").val(current_value + step);
                     } else {
                         // limit reached
-                        $(e.data.field).val(max);
+                        $(this).siblings("input[type='number']").val(max);
                     }
                 }
             }
@@ -64,7 +64,7 @@
 
         // clear event handler
         function clear_click(e){
-            $(e.data.field).first().val('');
+            $(this).siblings("input[type='number']").val('');
             return false;
         }
 
