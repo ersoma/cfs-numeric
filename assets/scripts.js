@@ -5,6 +5,11 @@
         $(".cfs_numeric").each(function(){
             $(this).find("button").on('click', {field: $(this).find("input")}, button_click);
         })
+
+        // select clear buttons
+        $(".cfs_numeric").each(function(){
+            $(this).find("a").on('click', {field: $(this).find("input")}, clear_click);
+        })
         
         // event handler
         function button_click(e){
@@ -55,6 +60,12 @@
                     }
                 }
             }
+        }
+
+        // clear event handler
+        function clear_click(e){
+            $(e.data.field).first().val('');
+            return false;
         }
 
         function toNum(value){

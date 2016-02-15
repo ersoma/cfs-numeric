@@ -8,8 +8,12 @@ class cfs_numeric extends cfs_field
     }
 
     function html( $field ) {
-        if ( empty( $field->value ) || ( ! isset($field->value)) ) {
-            $field->value = $this->get_option( $field, 'default_value' ) !== "" ? $this->get_option( $field, 'default_value' ) : "0";
+        // value
+        if ( empty( $field->value ) || ( ! isset($field->value['saved'])) ) {
+            $field->value = array(
+                'value'    => ($this->get_option( $field, 'default_value' ) !== "") ? $this->get_option( $field, 'default_value' ) : "0",
+                'saved'     => 0,
+            );
         }
 
         // min value
@@ -40,14 +44,22 @@ class cfs_numeric extends cfs_field
         }
     ?>
         <button type="button" class="button-secondary">-</button>
-        <input type="number" id="<?php echo $field->input_name; ?>" name="<?php echo $field->input_name; ?>" 
-            value="<?php echo $field->value; ?>" step="any" <?php echo $min_value_str . $max_value_str . $step_str ?>  />
+        <input type="number" id="<?php echo $field->input_name; ?>" name="<?php echo $field->input_name; ?>[value]" 
+            value="<?php echo $field->value['value']; ?>" step="any" <?php echo $min_value_str . $max_value_str . $step_str ?>  />
         <button type="button" class="button-secondary">+</button>
+
+        <input type="hidden" name="<?php echo $field->input_name; ?>[saved]" value="1">
+
+        <?php if( $this->get_option( $field, 'required' ) == 0) { ?>
+            <a href="#" class="button-secondary" style="float:right;"><?php _e('Clear', 'cfs-numeric'); ?></a>
+        <?php } ?>
+
         <p class="description">
             <?php
                 echo implode(", ", $parameters);
             ?>
         </p>
+
     <?php
     }
 
@@ -157,7 +169,7 @@ class cfs_numeric extends cfs_field
         $output = 0;
         if ( isset($value) ) {
             $precision = $field->options["precision"] !== "" ? $field->options["precision"] : 0;
-            $output = round($value, $precision);
+            $output = $value['value'] != "" ? round($value['value'], $precision) : "";
         }
         return $output;
     }
