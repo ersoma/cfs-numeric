@@ -154,6 +154,12 @@ class cfs_numeric extends cfs_field
     }
 
     function pre_save( $value, $field = null ) {
+        if ( isset( $value[0]['value'] ) && isset( $value[1]['saved'] ) ) {
+            $value = array(
+                    'value' => $value[0]['value'],
+                    'saved' => $value[1]['saved'],
+                ); 
+        }
         return serialize( $value );
     }
 
