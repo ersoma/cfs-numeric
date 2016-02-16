@@ -36,7 +36,7 @@
                     $(this).siblings("input[type='number']").val(min === undefined ? 0 : min);
                 } else {
                     // check is there is a limit and if it is reached
-                    if(min === undefined || (current_value - step) >= min) {
+                    if( min === undefined || ( current_value >= min + step && current_value <= max ) ) {
                         $(this).siblings("input[type='number']").val(current_value - step);
                     } else {
                         // limit reached
@@ -52,7 +52,7 @@
                     $(this).siblings("input[type='number']").val(max === undefined ? 0 : max);
                 } else {
                     // check is there is a limit and if it is reached
-                    if(max === undefined || (current_value + step) <= max) {
+                    if(max === undefined || ( current_value <= max - step && current_value >= min ) ) {
                         $(this).siblings("input[type='number']").val(current_value + step);
                     } else {
                         // limit reached
