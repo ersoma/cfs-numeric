@@ -64,8 +64,10 @@ class cfs_numeric extends cfs_field
     }
 
     function options_html( $key, $field ) {
+
         $this->load_option_assets();
 
+        // Get values or defaults
         $min_value = $key == 'clone' ? "0" : $this->get_option( $field, 'min_value' );
         $max_value = $key == 'clone' ? "100" : $this->get_option( $field, 'max_value' );
         $default_value = $key == 'clone' ? "0" : $this->get_option( $field, 'default_value' );

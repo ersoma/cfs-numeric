@@ -22,6 +22,7 @@ class cfs_numeric_addon
         add_filter('cfs_field_types', array($this, 'cfs_field_types'));
 
         add_action( 'plugins_loaded', 'cfsnumeric_load_textdomain' );
+        
         function cfsnumeric_load_textdomain() {
           load_plugin_textdomain( 'cfs-numeric', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
         }
